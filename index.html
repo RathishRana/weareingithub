@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SKY COMMANDER ACADEMY ✈️ Quiz Mission</title>
+<title>SKY COMMANDER ACADEMY ✈️ Learn · Fly · Conquer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#040a1c;
-    --panel:rgba(8,20,45,.82);
-    --panel2:rgba(10,26,58,.9);
+    --panel:rgba(8,20,45,.85);
+    --panel2:rgba(10,26,58,.92);
     --cyan:#00e5ff;
     --cyan-dim:rgba(0,229,255,.35);
     --amber:#ffb300;
@@ -24,13 +24,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--font-body);
-    overflow-x:hidden;
-    min-height:100vh;
-  }
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;min-height:100vh}
 
   /* ---------- BACKGROUND LAYERS ---------- */
   .bg-nebula{position:fixed;inset:0;z-index:-6;background:
@@ -39,8 +33,7 @@
     radial-gradient(ellipse 70% 50% at 50% 110%, rgba(255,179,0,.10), transparent 55%),
     linear-gradient(180deg,#02040d 0%, #05102b 55%, #071433 100%);}
   .stars{position:fixed;inset:0;z-index:-5;pointer-events:none}
-  .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;
-    animation:twinkle 3s ease-in-out infinite}
+  .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
   @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.95}}
   .gridfloor{position:fixed;left:-25%;right:-25%;bottom:-6vh;height:44vh;z-index:-4;
     transform:perspective(420px) rotateX(62deg);transform-origin:top;
@@ -51,6 +44,7 @@
     -webkit-mask-image:linear-gradient(180deg,transparent, #000 35%);
             mask-image:linear-gradient(180deg,transparent, #000 35%);}
   @keyframes gridmove{from{background-position:0 0,0 0}to{background-position:0 0,0 56px}}
+  body.in-flight .gridfloor, body.in-flight .bg-nebula, body.in-flight .stars{visibility:hidden}
   .scanlines{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.05;
     background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
   .vignette{position:fixed;inset:0;z-index:49;pointer-events:none;
@@ -72,10 +66,14 @@
 
   .btn{font-family:var(--font-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:#02131f;background:linear-gradient(180deg,#4df3ff,#00b8d9);
-    border:none;cursor:pointer;padding:15px 34px;font-size:1rem;position:relative;
+    border:none;cursor:pointer;padding:15px 34px;font-size:1rem;position:relative;overflow:hidden;
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
     box-shadow:0 0 18px rgba(0,229,255,.5), 0 4px 0 rgba(0,80,100,.8);
     transition:transform .08s, box-shadow .2s, filter .2s;user-select:none}
+  .btn::after{content:"";position:absolute;top:0;left:-80%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+    transform:skewX(-20deg);transition:left .45s}
+  .btn:hover::after{left:130%}
   .btn:hover{filter:brightness(1.15);box-shadow:0 0 32px rgba(0,229,255,.85), 0 4px 0 rgba(0,80,100,.8)}
   .btn:active{transform:translateY(3px)}
   .btn.amber{background:linear-gradient(180deg,#ffd257,#ff9d00);box-shadow:0 0 18px rgba(255,179,0,.5), 0 4px 0 rgba(120,70,0,.8)}
@@ -88,7 +86,7 @@
   /* ---------- TOP HUD ---------- */
   .hud{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:10px 16px;margin-bottom:16px;background:var(--panel);
-    border:1px solid rgba(0,229,255,.22);
+    border:1px solid rgba(0,229,255,.22);position:relative;z-index:5;
     clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
   .hud .stat{display:flex;flex-direction:column;align-items:center;min-width:64px}
   .hud .stat b{font-family:var(--font-head);font-size:1.05rem;color:#fff}
@@ -100,7 +98,6 @@
 
   /* ---------- INTRO ---------- */
   #screen-intro{justify-content:center;align-items:center;text-align:center}
-  .logo-wrap{position:relative;margin-bottom:8px}
   .radar{width:150px;height:150px;border-radius:50%;margin:0 auto 20px;position:relative;
     border:2px solid rgba(0,229,255,.5);
     background:
@@ -130,9 +127,9 @@
     text-align:center;outline:none;text-transform:uppercase;
     clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
   .callsign-row input:focus{box-shadow:0 0 18px rgba(0,229,255,.4)}
-  .intro-foot{margin-top:30px;color:var(--muted);font-size:.9rem;letter-spacing:.08em}
+  .intro-foot{margin-top:30px;color:var(--muted);font-size:.9rem;letter-spacing:.08em;line-height:1.6}
 
-  /* ---------- BASE / MISSION SELECT ---------- */
+  /* ---------- BASE / WORLD SELECT ---------- */
   .rankbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
   .rank-chip{display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--panel);
     border:1px solid rgba(255,179,0,.4);
@@ -141,22 +138,32 @@
   .rank-chip b{font-family:var(--font-head);color:var(--amber);letter-spacing:.1em;font-size:.95rem}
   .rank-chip small{display:block;color:var(--muted);letter-spacing:.2em;font-size:.6rem;text-transform:uppercase}
 
+  .mode-toggle{display:flex;margin-left:auto;border:1px solid var(--cyan-dim);
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+  .mode-toggle button{background:transparent;border:none;color:var(--muted);cursor:pointer;
+    font-family:var(--font-head);font-size:.66rem;letter-spacing:.16em;padding:12px 16px;text-transform:uppercase}
+  .mode-toggle button.on{background:rgba(0,229,255,.18);color:#fff;text-shadow:0 0 10px var(--cyan)}
+
   .missions{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
   .mcard{position:relative;padding:20px;background:var(--panel);cursor:pointer;
     border:1px solid rgba(0,229,255,.25);
     clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
     transition:transform .18s, box-shadow .18s, border-color .18s}
   .mcard:hover{transform:translateY(-5px);box-shadow:0 10px 34px rgba(0,229,255,.25);border-color:var(--cyan)}
+  .mcard.featured{border-color:rgba(255,179,0,.55);
+    background:linear-gradient(160deg, rgba(60,35,6,.55), var(--panel) 55%)}
+  .mcard.featured:hover{box-shadow:0 10px 34px rgba(255,179,0,.3)}
+  .m-head{display:flex;gap:14px;align-items:center}
   .mcard .m-ico{font-size:2.5rem;filter:drop-shadow(0 0 10px rgba(0,229,255,.6))}
-  .mcard h3{font-family:var(--font-head);font-size:1rem;letter-spacing:.1em;margin:10px 0 6px;color:#fff;text-transform:uppercase}
-  .mcard p{color:var(--muted);font-size:.92rem;line-height:1.4;min-height:2.6em}
+  .mcard h3{font-family:var(--font-head);font-size:.95rem;letter-spacing:.08em;color:#fff;text-transform:uppercase}
+  .mcard .m-tag{font-family:var(--font-head);font-size:.56rem;letter-spacing:.22em;color:var(--amber)}
+  .mcard p{color:var(--muted);font-size:.92rem;line-height:1.4;min-height:2.6em;margin-top:10px}
   .mcard .m-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
   .mcard .m-stars{color:var(--amber);letter-spacing:3px;font-size:1.05rem;text-shadow:0 0 10px rgba(255,179,0,.7)}
   .mcard .m-q{font-size:.68rem;color:var(--cyan);letter-spacing:.2em;font-family:var(--font-head)}
   .mcard.locked{filter:grayscale(.9) brightness(.55);cursor:not-allowed}
   .mcard.locked:hover{transform:none;box-shadow:none}
-  .mcard.locked::after{content:"🔒 COMPLETE PREVIOUS MISSION";position:absolute;inset:auto 0 12px 0;text-align:center;
-    font-family:var(--font-head);font-size:.6rem;letter-spacing:.2em;color:#ffd257}
+  .m-lock{margin-top:10px;text-align:center;font-family:var(--font-head);font-size:.6rem;letter-spacing:.18em;color:#ffd257}
   .mcard.mastered{border-color:rgba(43,255,136,.55)}
   .mcard .m-done{position:absolute;top:10px;right:14px;font-size:.62rem;font-family:var(--font-head);
     letter-spacing:.2em;color:var(--green);text-shadow:0 0 10px rgba(43,255,136,.8)}
@@ -165,7 +172,7 @@
   .badges-strip h4{font-family:var(--font-head);letter-spacing:.25em;font-size:.7rem;color:var(--muted);
     text-transform:uppercase;margin-bottom:10px}
   .badge-row{display:flex;gap:12px;flex-wrap:wrap}
-  .badge{width:74px;text-align:center;padding:10px 4px;background:var(--panel);
+  .badge{width:78px;text-align:center;padding:10px 4px;background:var(--panel);
     border:1px solid rgba(0,229,255,.2);border-radius:10px;transition:transform .2s}
   .badge .b-ico{font-size:1.7rem;display:block}
   .badge small{font-size:.55rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;line-height:1.1;display:block;margin-top:4px}
@@ -173,8 +180,14 @@
   .badge.owned:hover{transform:scale(1.12) rotate(-3deg)}
   .badge:not(.owned) .b-ico{filter:grayscale(1) brightness(.45)}
 
-  /* ---------- QUIZ ---------- */
-  .alt-wrap{margin:2px 0 18px}
+  /* ---------- QUIZ / FLIGHT ---------- */
+  #screen-quiz{max-width:none;padding:0}
+  .quiz-inner{max-width:1060px;margin:0 auto;padding:18px;width:100%;display:flex;flex-direction:column;min-height:100vh}
+  #flight-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;touch-action:none}
+  .fl-tele{display:flex;gap:8px}
+  .fl-tele .stat b{font-variant-numeric:tabular-nums}
+
+  .alt-wrap{margin:2px 0 14px;position:relative;z-index:5}
   .alt-track{position:relative;height:16px;background:rgba(0,25,50,.85);border:1px solid var(--cyan-dim);
     clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
   .alt-fill{position:absolute;inset:0;width:0%;transition:width .6s cubic-bezier(.2,.9,.3,1.2);
@@ -184,21 +197,21 @@
   .alt-label{display:flex;justify-content:space-between;font-size:.62rem;letter-spacing:.25em;
     color:var(--muted);text-transform:uppercase;margin-top:5px;font-family:var(--font-head)}
 
-  .q-card{padding:26px 24px}
+  .q-card{padding:24px 22px;position:relative;z-index:5;margin-top:auto;margin-bottom:auto}
   .q-topline{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
   .q-topline .retry-flag{color:var(--amber);font-family:var(--font-head);font-size:.62rem;letter-spacing:.25em;
     text-transform:uppercase;animation:pulse 1.2s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
-  .q-text{font-size:clamp(1.15rem,3.2vw,1.55rem);font-weight:600;line-height:1.35;color:#fff;margin-bottom:22px}
+  .q-text{font-size:clamp(1.1rem,3vw,1.45rem);font-weight:600;line-height:1.35;color:#fff;margin-bottom:20px}
   .opts{display:grid;grid-template-columns:1fr;gap:12px}
   @media(min-width:760px){.opts{grid-template-columns:1fr 1fr}}
   .opt{display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;
     background:var(--panel2);border:1px solid rgba(0,229,255,.25);color:var(--text);
-    font-family:var(--font-body);font-size:1.05rem;font-weight:600;padding:14px 16px;
+    font-family:var(--font-body);font-size:1.02rem;font-weight:600;padding:13px 15px;
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
     transition:transform .12s, border-color .15s, background .15s}
   .opt:hover:not(:disabled){transform:translateX(6px);border-color:var(--cyan);background:rgba(0,60,100,.75)}
-  .opt .key{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  .opt .key{flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
     font-family:var(--font-head);font-weight:700;color:var(--cyan);border:1px solid var(--cyan-dim);
     clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
   .opt:disabled{cursor:default;opacity:.85}
@@ -208,8 +221,59 @@
   .opt.wrong{border-color:var(--red);background:rgba(90,10,30,.85);animation:shake .4s ease}
   .opt.wrong .key{color:var(--red);border-color:var(--red)}
   .opt.dim{opacity:.35}
+  .opt.locked{border-color:var(--green);background:rgba(10,80,45,.6);opacity:.55}
+  .opt.small{font-size:.95rem;padding:11px 13px}
   @keyframes hitpop{0%{transform:scale(1)}40%{transform:scale(1.045)}100%{transform:scale(1)}}
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+
+  /* order / match / sort / map */
+  .order-slots{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+  .order-slot{display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,25,55,.6);
+    border:1px dashed rgba(0,229,255,.3);font-size:.95rem;color:var(--muted)}
+  .order-slot.filled{border-style:solid;border-color:var(--green);color:#fff;background:rgba(10,80,45,.5)}
+  .order-slot.revealed{border-style:solid;border-color:var(--amber);color:#ffe9b3;background:rgba(70,50,5,.5)}
+  .os-num{flex:none;width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-head);font-size:.8rem;color:var(--cyan);border:1px solid var(--cyan-dim);border-radius:50%}
+  .order-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  @media(min-width:760px){.order-grid{grid-template-columns:1fr 1fr}}
+
+  .match-prompt{margin-bottom:16px;padding:14px 18px;background:rgba(0,40,80,.6);border-left:3px solid var(--amber);
+    font-size:1.2rem;color:#fff}
+  .match-prompt b{color:var(--amber);font-size:1.35rem}
+  .mp-label{display:block;font-family:var(--font-head);font-size:.6rem;letter-spacing:.25em;color:var(--cyan);margin-bottom:4px}
+
+  .sort-prog{font-family:var(--font-head);font-size:.62rem;letter-spacing:.25em;color:var(--cyan);margin-bottom:10px}
+  .sort-card{padding:20px;margin-bottom:16px;text-align:center;font-size:1.25rem;color:#fff;
+    background:rgba(0,40,80,.65);border:1px solid var(--cyan-dim);
+    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+  .sort-card.pop{animation:hitpop .3s ease}
+  .sort-buckets{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .opt.bucket{justify-content:center;font-family:var(--font-head);letter-spacing:.1em}
+
+  .map-wrap{display:flex;justify-content:center}
+  .tacmap{width:min(430px,88vw);background:rgba(2,12,28,.75);border:1px solid var(--cyan-dim)}
+  .map-grid{stroke:rgba(0,229,255,.07);stroke-width:1}
+  .map-outline{fill:rgba(0,60,50,.35);stroke:rgba(0,229,255,.6);stroke-width:1.6}
+  .map-river{fill:none;stroke:#3f8fd4;stroke-width:3;stroke-linecap:round;stroke-dasharray:2 4}
+  .map-riverlbl{fill:#7fc4f0;font-size:8px;letter-spacing:.2em;font-family:var(--font-head)}
+  .map-spot{cursor:pointer}
+  .spot-halo{fill:transparent;stroke:rgba(0,229,255,.0);transition:stroke .2s}
+  .map-spot:hover .spot-halo{stroke:rgba(0,229,255,.6)}
+  .spot-dot{fill:#0a2a40;stroke:var(--cyan);stroke-width:1.6}
+  .spot-lbl{fill:#cfefff;font-size:8.5px;text-anchor:middle;font-family:var(--font-head);letter-spacing:.06em;opacity:0;transition:opacity .3s;pointer-events:none}
+  .tacmap.resolved .spot-lbl{opacity:.45}
+  .map-spot.hit .spot-dot{fill:var(--green);stroke:#fff;animation:hitpop .5s ease}
+  .map-spot.hit .spot-lbl{opacity:1;fill:var(--green)}
+  .map-spot.miss .spot-dot{fill:var(--red);stroke:#fff}
+  .map-spot.miss .spot-lbl{opacity:1;fill:var(--red)}
+  .map-hint{text-align:center;font-family:var(--font-head);font-size:.62rem;letter-spacing:.25em;
+    color:var(--cyan);margin-bottom:10px}
+
+  .reveal{margin-top:16px;background:rgba(0,25,55,.75);border:1px solid rgba(255,179,0,.4);padding:12px 14px}
+  .reveal-head{font-family:var(--font-head);font-size:.62rem;letter-spacing:.22em;color:var(--amber);margin-bottom:8px}
+  .reveal-row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;font-size:.95rem;
+    border-bottom:1px dashed rgba(0,229,255,.15)}
+  .reveal-row b{color:var(--green);text-align:right}
 
   .feedback{margin-top:18px;display:none;animation:screenin .35s ease both}
   .feedback.show{display:block}
@@ -224,6 +288,35 @@
     background:rgba(255,110,0,.15);border:1px solid rgba(255,140,0,.5);border-radius:999px;
     color:#ffb85c;font-weight:700;font-size:.85rem}
 
+  /* flight overlays */
+  .caption{position:fixed;top:26%;left:50%;transform:translate(-50%,-50%) scale(.9);z-index:8;
+    font-family:var(--font-head);font-weight:900;font-size:clamp(1.1rem,3.6vw,1.9rem);letter-spacing:.1em;
+    color:#fff;text-shadow:0 0 22px rgba(0,229,255,.9), 0 2px 6px rgba(0,0,0,.8);text-transform:uppercase;
+    opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;text-align:center;padding:0 16px}
+  .caption.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+  .briefing{position:fixed;inset:0;z-index:9;display:none;align-items:center;justify-content:center;
+    background:rgba(2,6,16,.72);backdrop-filter:blur(3px);padding:18px}
+  .briefing.show{display:flex;animation:screenin .4s ease both}
+  .brief-card{max-width:520px;text-align:center;padding:34px 28px}
+  .brief-card .b-ico-big{font-size:3rem}
+  .brief-card h2{font-family:var(--font-head);letter-spacing:.1em;font-size:1.3rem;color:#fff;margin:10px 0 4px;text-transform:uppercase}
+  .brief-card .b-tag{font-family:var(--font-head);font-size:.62rem;letter-spacing:.28em;color:var(--amber)}
+  .brief-card p{color:var(--muted);line-height:1.5;margin:14px 0}
+  .brief-card .b-count{font-family:var(--font-head);font-size:.7rem;letter-spacing:.2em;color:var(--green);margin-bottom:20px}
+  .brief-ctl{margin-top:8px;color:var(--muted);font-size:.8rem;letter-spacing:.08em;line-height:1.6}
+
+  .mayday-banner{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:8;display:none;
+    text-align:center;padding:12px 26px;background:rgba(60,5,15,.85);border:1px solid var(--red);
+    clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);
+    box-shadow:0 0 30px rgba(255,59,92,.5)}
+  .mayday-banner.show{display:block;animation:screenin .3s ease both}
+  .mayday-banner b{display:block;font-family:var(--font-head);color:#ff8296;letter-spacing:.16em;
+    font-size:1rem;animation:pulse .7s ease-in-out infinite}
+  .mayday-banner small{color:#ffc4cd;letter-spacing:.06em}
+  .m-timer{height:6px;margin-top:8px;background:rgba(255,255,255,.12)}
+  .m-timer-fill{height:100%;width:100%;background:linear-gradient(90deg,#ff3b5c,#ffb300);transition:width .1s linear}
+
   /* ---------- DEBRIEF / VICTORY ---------- */
   #screen-debrief,#screen-victory{justify-content:center;align-items:center;text-align:center}
   .stars-row{font-size:clamp(2.6rem,9vw,4.2rem);letter-spacing:14px;margin:10px 0}
@@ -233,12 +326,12 @@
   .stars-row span.off{opacity:.18;transform:none;filter:grayscale(1)}
   @keyframes starpop{to{opacity:1;transform:scale(1) rotate(0)}}
   .debrief-stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0 8px}
-  .dstat{padding:12px 22px;background:var(--panel);border:1px solid rgba(0,229,255,.25);min-width:120px;
+  .dstat{padding:12px 22px;background:var(--panel);border:1px solid rgba(0,229,255,.25);min-width:110px;
     clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
   .dstat b{display:block;font-family:var(--font-head);font-size:1.5rem;color:#fff}
   .dstat span{font-size:.6rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
   .badge-unlock{margin:16px auto 4px;display:none;align-items:center;gap:12px;padding:12px 22px;
-    background:rgba(60,40,0,.6);border:1px solid var(--amber);max-width:420px;
+    background:rgba(60,40,0,.6);border:1px solid var(--amber);max-width:440px;
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
     animation:hitpop .6s ease}
   .badge-unlock.show{display:flex}
@@ -246,6 +339,8 @@
   .badge-unlock div{text-align:left}
   .badge-unlock b{font-family:var(--font-head);color:var(--amber);letter-spacing:.12em;font-size:.9rem}
   .badge-unlock small{color:var(--muted);display:block}
+  .d-unlock{margin:14px auto 0;padding:10px 22px;color:var(--green);font-family:var(--font-head);
+    font-size:.8rem;letter-spacing:.14em;border:1px dashed rgba(43,255,136,.5)}
   .debrief-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:24px}
   .big-head{font-family:var(--font-head);font-weight:900;font-size:clamp(1.6rem,6vw,3rem);text-transform:uppercase;
     letter-spacing:.06em;background:linear-gradient(180deg,#fff,#ffd257 60%,#ff9d00);
@@ -255,6 +350,24 @@
     filter:drop-shadow(0 0 30px rgba(255,179,0,.7))}
   @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
+  /* ---------- COMMAND LOG ---------- */
+  .log-list{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .log-row{padding:14px 16px;background:var(--panel);border:1px solid rgba(0,229,255,.2)}
+  .log-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .log-top b{color:#fff;font-size:1.05rem}
+  .log-pct{font-family:var(--font-head);font-size:.95rem}
+  .log-pct.good{color:var(--green)} .log-pct.mid{color:var(--amber)} .log-pct.low{color:var(--red)}
+  .log-bar{height:10px;background:rgba(0,25,50,.9);border:1px solid rgba(0,229,255,.2)}
+  .log-fill{height:100%;transition:width .6s ease}
+  .log-fill.good{background:linear-gradient(90deg,#00b8d9,#2bff88)}
+  .log-fill.mid{background:linear-gradient(90deg,#ff9d00,#ffd257)}
+  .log-fill.low{background:linear-gradient(90deg,#ff3b5c,#ff8296)}
+  .log-row small{display:block;margin-top:6px;color:var(--muted);letter-spacing:.05em}
+  .log-note{margin-top:18px;padding:14px 18px;background:rgba(0,40,80,.5);border-left:3px solid var(--amber);
+    line-height:1.55;color:var(--text)}
+  .log-note b{color:var(--amber)}
+  .log-empty{color:var(--muted);text-align:center;padding:30px 0}
+
   /* ---------- FX ---------- */
   .jetfly{position:fixed;top:30%;left:-15%;z-index:60;font-size:3.2rem;pointer-events:none;display:none;
     filter:drop-shadow(0 0 14px var(--cyan))}
@@ -262,8 +375,7 @@
     background:linear-gradient(90deg,transparent,rgba(0,229,255,.9));box-shadow:0 0 18px var(--cyan)}
   .jetfly.go{display:block;animation:jetfly 1.5s cubic-bezier(.3,.1,.4,1) forwards}
   @keyframes jetfly{from{left:-18%}to{left:112%}}
-  .confetti-bit{position:fixed;top:-4vh;z-index:61;pointer-events:none;
-    animation:cfall linear forwards}
+  .confetti-bit{position:fixed;top:-4vh;z-index:61;pointer-events:none;animation:cfall linear forwards}
   @keyframes cfall{to{transform:translateY(110vh) rotate(var(--spin));opacity:.9}}
   .float-pts{position:fixed;z-index:62;pointer-events:none;font-family:var(--font-head);font-weight:900;
     color:var(--amber);text-shadow:0 0 12px rgba(255,179,0,.9);animation:ptsup 1s ease forwards}
@@ -287,37 +399,40 @@
 
 <!-- ================= INTRO ================= -->
 <section class="screen active" id="screen-intro">
-  <div class="logo-wrap">
-    <div class="radar">
-      <span class="blip" style="top:28%;left:62%"></span>
-      <span class="blip" style="top:64%;left:30%;animation-delay:.9s"></span>
-      <span class="blip" style="top:48%;left:74%;animation-delay:1.7s"></span>
-    </div>
+  <div class="radar">
+    <span class="blip" style="top:28%;left:62%"></span>
+    <span class="blip" style="top:64%;left:30%;animation-delay:.9s"></span>
+    <span class="blip" style="top:48%;left:74%;animation-delay:1.7s"></span>
   </div>
   <h1 class="title">Sky Commander<br>Academy</h1>
-  <div class="subtitle">✦ Elite Knowledge Squadron ✦</div>
+  <div class="subtitle">✦ Learn · Fly · Conquer ✦</div>
   <div class="callsign-row">
     <input id="pilot-name" maxlength="14" placeholder="ENTER PILOT NAME" autocomplete="off">
   </div>
   <button class="btn amber" id="btn-start" style="font-size:1.15rem;padding:18px 46px">🚀 Start Engines</button>
-  <p class="intro-foot">Answer every question correctly to master a mission.<br>Wrong answers come back — real pilots retry until it's perfect! 🎯</p>
+  <p class="intro-foot">Fly through knowledge rings, survive MAYDAY emergencies,<br>
+  and master every question — wrong answers circle back until you own them! 🎯</p>
 </section>
 
-<!-- ================= BASE / MISSIONS ================= -->
+<!-- ================= BASE / WORLDS ================= -->
 <section class="screen" id="screen-base">
   <div class="hud">
     <div class="stat"><b id="hud-pilot">CADET</b><span>Pilot</span></div>
     <div class="stat"><b id="hud-total">0</b><span>Career Pts</span></div>
-    <div class="stat"><b id="hud-stars">0/15</b><span>Stars</span></div>
+    <div class="stat"><b id="hud-stars">0/21</b><span>Stars</span></div>
+    <button class="icon-btn" id="btn-log" title="Command Log — progress by topic">📊</button>
     <button class="icon-btn" id="btn-mute" title="Sound on/off">🔊</button>
   </div>
   <div class="rankbar">
     <div class="rank-chip"><span class="r-ico" id="rank-ico">🎖️</span>
       <div><b id="rank-name">CADET</b><small id="rank-next">earn points to rank up</small></div>
     </div>
-    <div class="tag" style="margin-left:auto">Select your mission, Commander</div>
+    <div class="mode-toggle">
+      <button id="mode-flight">🛫 Flight Mission</button>
+      <button id="mode-drill">⚡ Quick Drill</button>
+    </div>
   </div>
-  <div class="missions" id="missions"></div>
+  <div class="missions" id="worlds"></div>
   <div class="badges-strip">
     <h4>🏅 Medal Locker</h4>
     <div class="badge-row" id="badge-row"></div>
@@ -327,40 +442,68 @@
   </div>
 </section>
 
-<!-- ================= QUIZ ================= -->
+<!-- ================= QUIZ / FLIGHT ================= -->
 <section class="screen" id="screen-quiz">
-  <div class="hud">
-    <button class="icon-btn" id="btn-abort" title="Back to base">🏠</button>
-    <div class="stat"><b id="q-mission" style="font-size:.8rem">MISSION</b><span>Operation</span></div>
-    <div class="stat"><b id="q-score">0</b><span>Points</span></div>
-    <div class="stat"><b id="q-streak">—</b><span>Streak</span></div>
-    <button class="icon-btn" id="btn-mute2" title="Sound on/off">🔊</button>
-  </div>
-
-  <div class="alt-wrap">
-    <div class="alt-track">
-      <div class="alt-fill" id="alt-fill"></div>
-      <div class="alt-jet" id="alt-jet">🛩️</div>
-    </div>
-    <div class="alt-label"><span>Runway</span><span id="alt-count">0 / 0 targets locked</span><span>Mission complete</span></div>
-  </div>
-
-  <div class="panel q-card">
-    <div class="q-topline">
-      <span class="tag" id="q-num">TARGET 1</span>
-      <span class="retry-flag" id="q-retry" style="display:none">⟲ Retry target — lock it in this time!</span>
-    </div>
-    <div class="q-text" id="q-text"></div>
-    <div class="opts" id="opts"></div>
-    <div class="feedback" id="feedback">
-      <div class="fb-head" id="fb-head"></div>
-      <div class="fb-pts" id="fb-pts"></div>
-      <div class="fb-body" id="fb-body"></div>
-      <div style="margin-top:18px;text-align:right">
-        <button class="btn" id="btn-next">Next Target ➤</button>
+  <canvas id="flight-canvas"></canvas>
+  <div class="quiz-inner">
+    <div class="hud">
+      <button class="icon-btn" id="btn-abort" title="Back to base">🏠</button>
+      <div class="stat"><b id="q-mission" style="font-size:.72rem">MISSION</b><span>Operation</span></div>
+      <div class="fl-tele" id="fl-tele">
+        <div class="stat"><b id="hud-alt">0</b><span>Alt ft</span></div>
+        <div class="stat"><b id="hud-spd">0</b><span>km/h</span></div>
       </div>
+      <div class="stat"><b id="q-score">0</b><span>Points</span></div>
+      <div class="stat"><b id="q-streak">—</b><span>Streak</span></div>
+      <button class="icon-btn" id="btn-mute2" title="Sound on/off">🔊</button>
     </div>
-    <p class="kbd-hint">⌨️ Tip: press 1–4 to answer, ENTER for next</p>
+
+    <div class="alt-wrap">
+      <div class="alt-track">
+        <div class="alt-fill" id="alt-fill"></div>
+        <div class="alt-jet" id="alt-jet">🛩️</div>
+      </div>
+      <div class="alt-label"><span>Runway</span><span id="alt-count">0 / 0 targets locked</span><span>Mission complete</span></div>
+    </div>
+
+    <div class="panel q-card" id="q-card" style="display:none">
+      <div class="q-topline">
+        <span class="tag" id="q-num">TARGET 1</span>
+        <span class="retry-flag" id="q-retry" style="display:none">⟲ Retry ring — lock it in this time!</span>
+      </div>
+      <div class="q-text" id="q-text"></div>
+      <div id="q-area"></div>
+      <div class="feedback" id="feedback">
+        <div class="fb-head" id="fb-head"></div>
+        <div class="fb-pts" id="fb-pts"></div>
+        <div class="fb-body" id="fb-body"></div>
+        <div style="margin-top:18px;text-align:right">
+          <button class="btn" id="btn-next">Continue Flight ➤</button>
+        </div>
+      </div>
+      <p class="kbd-hint">⌨️ 1–4 to answer · ENTER to continue · Arrow keys / mouse to steer</p>
+    </div>
+  </div>
+
+  <div class="caption" id="caption"></div>
+
+  <div class="briefing" id="briefing">
+    <div class="panel brief-card">
+      <div class="b-ico-big" id="b-ico-big">🛫</div>
+      <h2 id="b-title">Mission</h2>
+      <div class="b-tag" id="b-tag"></div>
+      <p id="b-desc"></p>
+      <div class="b-count" id="b-count"></div>
+      <button class="btn amber" id="btn-launch" style="font-size:1.05rem">🛫 CLEARED FOR TAKEOFF</button>
+      <p class="brief-ctl">Steer with your mouse, finger, or arrow keys.<br>
+      Fly through the glowing rings — each one is a question. Watch out for MAYDAYs! 🚨</p>
+    </div>
+  </div>
+
+  <div class="mayday-banner" id="mayday-banner">
+    <b id="m-title">🚨 MAYDAY! MAYDAY!</b>
+    <small id="m-sub">Answer fast to save the jet!</small>
+    <div class="m-timer"><div class="m-timer-fill" id="m-timer-fill"></div></div>
   </div>
 </section>
 
@@ -374,11 +517,13 @@
     <div class="dstat"><b id="d-score">0</b><span>Points</span></div>
     <div class="dstat"><b id="d-acc">0%</b><span>First-Try Hits</span></div>
     <div class="dstat"><b id="d-streak">0</b><span>Best Streak</span></div>
+    <div class="dstat"><b id="d-mayday">—</b><span>Maydays Survived</span></div>
   </div>
   <div class="badge-unlock" id="d-badge">
     <span class="bu-ico" id="d-badge-ico">🏅</span>
     <div><b id="d-badge-name">MEDAL UNLOCKED</b><small>New medal added to your locker!</small></div>
   </div>
+  <div class="d-unlock" id="d-unlock" style="display:none"></div>
   <div class="debrief-btns">
     <button class="btn ghost" id="btn-replay">⟲ Fly Again</button>
     <button class="btn" id="btn-base">🏠 Base</button>
@@ -393,7 +538,7 @@
   <p style="font-size:1.2rem;max-width:600px;line-height:1.6;margin-top:14px" id="v-text"></p>
   <div class="debrief-stats">
     <div class="dstat"><b id="v-pts">0</b><span>Career Points</span></div>
-    <div class="dstat"><b id="v-stars">0/15</b><span>Stars</span></div>
+    <div class="dstat"><b id="v-stars">0/21</b><span>Stars</span></div>
     <div class="dstat"><b id="v-medals">0</b><span>Medals</span></div>
   </div>
   <div class="debrief-btns">
@@ -401,726 +546,23 @@
   </div>
 </section>
 
-<script>
-"use strict";
-/* =====================================================
-   SKY COMMANDER ACADEMY — quiz engine
-   ===================================================== */
+<!-- ================= COMMAND LOG ================= -->
+<section class="screen" id="screen-log">
+  <div class="hud">
+    <button class="icon-btn" id="btn-log-back" title="Back to base">🏠</button>
+    <div class="stat"><b style="font-size:.85rem">📊 COMMAND LOG</b><span>Progress by topic</span></div>
+    <div style="width:42px"></div>
+  </div>
+  <p style="color:var(--muted);margin-bottom:12px;line-height:1.5">
+    Every answer is logged by topic. Green = mastered, amber = getting there, red = needs another sortie.
+    Weakest topics float to the top.</p>
+  <div class="log-list" id="log-list"></div>
+  <div class="log-note" id="log-note"></div>
+</section>
 
-/* ---------------- QUESTION BANK ---------------- */
-const MISSIONS = [
-  {
-    id:"time",
-    icon:"⏳",
-    name:"Operation Time Machine",
-    desc:"Fly back thousands of years! Scan how early humans lived, farmed and built the first kingdoms.",
-    badge:{ico:"🏺",name:"History Hawk"},
-    questions:[
-      {
-        q:"The people who focused on basic survival and simple farming were…",
-        o:["Early villages","Mahajanapadas","Janapadas","Native settlers"],
-        a:0,
-        exp:"<b>Early villages</b> were humanity's first base camps! People stopped wandering, set up camp near rivers, grew simple crops and focused on pure survival — food, shelter, safety. No kingdoms or armies yet, just brave families learning to farm."
-      },
-      {
-        q:"If you were an early villager, what would you be doing for a living?",
-        o:["Pottery","Making iron tools","Weaving","All of the above"],
-        a:3,
-        exp:"<b>All of the above!</b> Early villagers were multi-skilled, like a pilot who can also fix the engine. They shaped clay pots to store grain, wove cloth for clothes and hammered out tools. Every villager had a job in the squadron!"
-      },
-      {
-        q:"Putting events in the right order is called…",
-        o:["Advancement","Linetime","Chronology","Detour"],
-        a:2,
-        exp:"<b>Chronology</b> — from 'chronos', the Greek word for TIME. Historians line up events like jets on a runway: first, next, last. Watch out for the decoy 'Linetime' — the real word is TIMEline, and arranging one is chronology!"
-      },
-      {
-        q:"People of a Janapada live together in groups. Why is this helpful?",
-        o:["To stop trade","To live without rules","To avoid working","For safety and cooperation"],
-        a:3,
-        exp:"<b>Safety and cooperation</b> — squadrons fly in formation for the exact same reason! Together, people could guard each other from danger, share huge jobs like farming and building, and swap skills. Teamwork = survival."
-      },
-      {
-        q:"Assertion (A): Barter is the exchange of goods without money.\nReason (R): People use debit cards in the barter system.",
-        o:["Both A and R are true, and R explains A","A and R are true, but R does not explain A","A is true, but R is false","A is false, but R is true"],
-        a:2,
-        exp:"A is <b>TRUE</b> — barter means swapping goods directly, like trading rice for a clay pot. R is <b>FALSE</b> — debit cards in barter times?! Money didn't even exist yet. Cards are modern tech, thousands of years after barter. So: A true, R false!"
-      },
-      {
-        q:"If you could advise a Mahajanapada ruler, what would be the best suggestion?",
-        o:["Close all markets","Improve farming, trade and security","Reduce food production","Stop building roads"],
-        a:1,
-        exp:"A smart ruler thinks like a squadron leader: keep everyone fed (<b>farming</b>), keep goods and money flowing (<b>trade</b>), and defend the base (<b>security</b>). Kingdoms that mastered all three — like Magadha — became superpowers!"
-      },
-      {
-        q:"Why is the Magadha empire important?",
-        o:["It had the world's first airport","It was tiny and quiet","It grew into the most powerful kingdom, with fertile land, iron and strong rulers","It never traded with anyone"],
-        a:2,
-        exp:"<b>Magadha was the superpower of ancient India!</b> Rich river-side land grew mountains of food, iron mines armed it with strong tools and weapons, and mighty rulers like Bimbisara and Ajatashatru turned it into the launchpad for India's greatest empires."
-      },
-      {
-        q:"You're a member of the Bhil tribe. Why might your family move from one camp to another?",
-        o:["To find food, water and grazing land as seasons change","Because tents get boring","To watch television","To avoid school"],
-        a:0,
-        exp:"Tribes like the <b>Bhils moved with nature's radar</b>! When a season made food, water or grass for their animals run low, the whole camp relocated to a better spot. Moving wasn't a holiday — it was a survival strategy."
-      },
-      {
-        q:"How did life change when early settlers became villagers?",
-        o:["They stopped eating food","They built permanent homes, started farming and kept animals","They started flying jets","Nothing changed at all"],
-        a:1,
-        exp:"Three mega-upgrades, cadet: <b>1)</b> permanent homes instead of wandering, <b>2)</b> growing their own food by farming instead of only hunting and gathering, <b>3)</b> taming animals like cows, goats and dogs. That's how villages — and later cities — took off!"
-      }
-    ]
-  },
-  {
-    id:"money",
-    icon:"💰",
-    name:"Operation Gold Rupee",
-    desc:"Crack the code of money — from ancient barter swaps to lightning-fast digital payments.",
-    badge:{ico:"🪙",name:"Treasure Tactician"},
-    questions:[
-      {
-        q:"What is barter?",
-        o:["Buying things with coins","Exchanging goods without using money","Shopping online","Keeping money in a bank"],
-        a:1,
-        exp:"<b>Barter = swap!</b> Long before coins and notes, people traded things directly — a sack of rice for a clay pot, a goat for cloth. No money involved, just deal-making skills!"
-      },
-      {
-        q:"Aman has rice, Raman has a clay pot. Why might their barter exchange FAIL?",
-        o:["Rice and pots are illegal to trade","Raman may not want rice, and the goods may not be of equal value","Aman's rice is too tasty","They don't have a shopping app"],
-        a:1,
-        exp:"Barter has two famous glitches: <b>1)</b> the other person must actually WANT what you have — maybe Raman doesn't need rice! <b>2)</b> the swap must feel FAIR — is one pot really worth a whole sack of rice? These problems are exactly why humans invented money!"
-      },
-      {
-        q:"The Indian Rupee symbol ₹ was designed by ______ in ______.",
-        o:["D Udaya Kumar, 2010","D Kumar, 2015","Kumar, 2012","Yuday Kumar, 2010"],
-        a:0,
-        exp:"Target locked: <b>D Udaya Kumar</b> designed the ₹ symbol in <b>2010</b>. It cleverly blends the Devanagari letter 'र' with the Roman 'R', and its two horizontal lines stand for the Indian flag. A symbol as iconic as the Air Force roundel!"
-      },
-      {
-        q:"Meera's family deposits old notes in their bank account. What is the main benefit?",
-        o:["The bank keeps the money forever","The notes become toys","The money is safe and can be used later","The family gets free gifts"],
-        a:2,
-        exp:"A bank is a <b>high-security hangar for your money</b>! Deposited money is protected from loss and theft, it can even grow a little (that's called interest), and it's ready for launch whenever you need it."
-      },
-      {
-        q:"What are digital payments?",
-        o:["Paying with paper letters","Drawing pictures of money","Trading goods for goods","Paying money electronically using phones, cards or computers"],
-        a:3,
-        exp:"<b>Digital payments</b> move money electronically — no cash needed! With a phone, card or computer, money zooms from one bank account to another in seconds. It's money travelling at jet speed!"
-      },
-      {
-        q:"Which of these are types of digital payments?",
-        o:["UPI apps and debit/credit cards","Giving someone a cow","Writing a nice poem","Handing over seashells"],
-        a:0,
-        exp:"<b>UPI</b> (apps like Google Pay, PhonePe, Paytm) fires money phone-to-phone instantly, and <b>debit/credit cards</b> let you pay with a tap or swipe. Net banking and mobile wallets are digital payments too!"
-      },
-      {
-        q:"Why did people invent money after barter?",
-        o:["Because wallets looked cool","Money is easy to carry, easy to count, and everyone accepts it","To build more banks","Because pots were too heavy"],
-        a:1,
-        exp:"Money solved barter's glitches in one shot: it's <b>easy to carry</b> (lighter than a goat!), <b>easy to count</b>, and <b>everyone accepts it</b> — so you never need to find someone who wants exactly your stuff. Genius upgrade!"
-      }
-    ]
-  },
-  {
-    id:"jets",
-    icon:"✈️",
-    name:"Operation Sky Guardians",
-    desc:"Bonus squadron! Tejas, Rafale, Sukhoi — how well do you know India's fighter jets?",
-    badge:{ico:"🛩️",name:"Fighter Ace"},
-    questions:[
-      {
-        q:"Which fighter jet is designed and built in India?",
-        o:["Rafale","F-16","Tejas","MiG-21"],
-        a:2,
-        exp:"The <b>HAL Tejas</b> is India's own home-grown fighter — designed and built right here! 'Tejas' is Sanskrit for <b>radiance</b>. It's small, super-agile and one of the lightest supersonic fighters on the planet. 🇮🇳"
-      },
-      {
-        q:"India's Rafale fighter jets come from which country?",
-        o:["Russia","France","USA","Japan"],
-        a:1,
-        exp:"The <b>Rafale</b> roars in from <b>France</b>, built by Dassault Aviation. 'Rafale' means 'gust of wind' — and with twin engines and deadly precision, it's one of the most feared jets in the sky!"
-      },
-      {
-        q:"Which big twin-engine fighter, built with Russia, forms the backbone of the Indian Air Force?",
-        o:["Sukhoi Su-30MKI","Mirage 2000","Tejas","Cessna"],
-        a:0,
-        exp:"The mighty <b>Sukhoi Su-30MKI</b>! It's big, carries two pilots, and can pull jaw-dropping stunts like the 'Cobra' — rearing its nose up mid-flight like a striking snake. The IAF flies more than 250 of them!"
-      },
-      {
-        q:"What happens when a jet flies FASTER than the speed of sound?",
-        o:["It travels back in time","It creates a sonic boom","Its wings fall off","It becomes invisible"],
-        a:1,
-        exp:"<b>BOOM!</b> Crossing the speed of sound (about 1,235 km/h — called Mach 1) squashes the air into a shockwave, and people below hear a thunder-like <b>sonic boom</b>. Fighter pilots call it 'going supersonic'!"
-      },
-      {
-        q:"What is the motto of the Indian Air Force?",
-        o:["Fly Fast, Fly Far","Touch the Sky with Glory","Kings of the Clouds","Speed is Life"],
-        a:1,
-        exp:"<b>'Touch the Sky with Glory'</b> — from the Sanskrit 'Nabhah Sprisham Deeptam', words taken from the Bhagavad Gita. Every IAF pilot flies with that motto burning in their heart!"
-      },
-      {
-        q:"Fighter pilots wear a special suit for sharp, high-speed turns. What is it called?",
-        o:["A space suit","A G-suit","A raincoat","A turbo jacket"],
-        a:1,
-        exp:"The <b>G-suit</b>! In a hard turn, gravity multiplies (pilots call it 'pulling Gs') and blood gets yanked toward your feet. The G-suit squeezes the legs like a python hug so blood keeps reaching the brain and the pilot stays sharp!"
-      },
-      {
-        q:"What is the name of the IAF's famous aerobatic display team?",
-        o:["Thunder Tigers","Sky Dancers","Surya Kiran","Falcon Five"],
-        a:2,
-        exp:"<b>Surya Kiran</b> — meaning 'Sun Rays'! Nine orange-and-white Hawk jets flying wingtip-to-wingtip, painting loops, hearts and arrows in the sky. Precision flying at its absolute coolest."
-      }
-    ]
-  },
-  {
-    id:"army",
-    icon:"🪖",
-    name:"Operation Brave Hearts",
-    desc:"Salute the Indian Army! Medals, mountains, tanks and the heroes who guard our nation.",
-    badge:{ico:"🎖️",name:"Iron Guardian"},
-    questions:[
-      {
-        q:"The Indian Army guards the HIGHEST battlefield in the world. What is it called?",
-        o:["Mount Everest","Siachen Glacier","Thar Desert","Kanchenjunga"],
-        a:1,
-        exp:"The <b>Siachen Glacier</b> — around 6,000 metres up in the Karakoram mountains, where temperatures crash below −50°C! Indian soldiers guard it day and night. It takes unbelievable courage just to breathe up there."
-      },
-      {
-        q:"What is India's highest award for bravery in war?",
-        o:["Param Vir Chakra","Bharat Ratna","Gold Star Medal","Arjuna Award"],
-        a:0,
-        exp:"The <b>Param Vir Chakra</b> — 'Wheel of the Ultimate Brave'. It's given for the most extraordinary courage in battle, often to heroes who gave their lives for the nation. The rarest and most respected medal in India."
-      },
-      {
-        q:"When is Indian Army Day celebrated?",
-        o:["26 January","15 August","15 January","2 October"],
-        a:2,
-        exp:"<b>15 January!</b> On that day in 1949, Field Marshal K. M. Cariappa became the first INDIAN to command the Indian Army. Every year the Army marks it with parades and shows of skill."
-      },
-      {
-        q:"Which main battle tank was designed in India?",
-        o:["Tiger","Abrams","T-90","Arjun"],
-        a:3,
-        exp:"The <b>Arjun</b> — India's own main battle tank, named after the legendary archer from the Mahabharata! It weighs about 68 tonnes (like 10 elephants) and its cannon can hit targets kilometres away."
-      },
-      {
-        q:"What is the motto of the Indian Army?",
-        o:["Attack First","Service Before Self","Strength and Speed","Never Sleep"],
-        a:1,
-        exp:"<b>'Service Before Self'</b> — the nation comes first, always. That's why soldiers stand guard in freezing mountains and burning deserts while we sleep safely at home. Salute! 🫡"
-      },
-      {
-        q:"On Republic Day, the Army's grand parade marches down which famous road in Delhi?",
-        o:["Marine Drive","Kartavya Path","MG Road","Ring Road"],
-        a:1,
-        exp:"<b>Kartavya Path</b> (earlier called Rajpath)! Every 26 January, tanks rumble, soldiers march in perfect formation, and fighter jets scream overhead in salute. It's India's mightiest show of pride."
-      }
-    ]
-  },
-  {
-    id:"turbo",
-    icon:"🌪️",
-    name:"Operation Turbo Storm",
-    desc:"Final bonus round: spinning tornados, screaming supercars and ninja-level origami!",
-    badge:{ico:"🏎️",name:"Storm Racer"},
-    questions:[
-      {
-        q:"What shape does a tornado make as it touches the ground?",
-        o:["A perfect cube","A spinning funnel cloud","A flat pancake","A zigzag lightning bolt"],
-        a:1,
-        exp:"A <b>spinning funnel cloud</b> — like a monstrous grey tornado-shaped drill from the sky! Inside, winds can whirl at over 300 km/h, faster than a Formula 1 car at full throttle."
-      },
-      {
-        q:"Which scale do scientists use to measure a tornado's power?",
-        o:["The Richter scale","The Celsius scale","The Fujita (EF) scale","The Mach scale"],
-        a:2,
-        exp:"The <b>Fujita scale</b> (today the 'EF scale') rates tornados from EF0 (weak) to EF5 (city-flattening monster). The Richter scale is a decoy — that one measures earthquakes!"
-      },
-      {
-        q:"A tornado warning sounds! Where is the SAFEST place to go?",
-        o:["Under a big tree","Next to a window to watch","In a car on the highway","A basement or a small inner room away from windows"],
-        a:3,
-        exp:"Get LOW and get INSIDE: a <b>basement or a small inner room away from windows</b> is your bunker. Flying glass and debris are a tornado's main weapons — windows are the danger zone, not the viewing gallery!"
-      },
-      {
-        q:"Which company builds the Chiron, one of the fastest supercars ever (over 400 km/h)?",
-        o:["Bugatti","Maruti","Tata","Toyota"],
-        a:0,
-        exp:"<b>Bugatti!</b> The Chiron's engine has 16 cylinders and about 1,500 horsepower — roughly the power of 15 normal cars glued together. At top speed it covers 100 metres in less than a second!"
-      },
-      {
-        q:"Why are supercars built so low and smooth-shaped?",
-        o:["To fit in small garages","To look scary at night","So air flows over them smoothly — just like a jet (aerodynamics!)","To save paint"],
-        a:2,
-        exp:"<b>Aerodynamics</b> — the same science that makes fighter jets fast! A low, smooth body lets air slide over the car instead of pushing against it, and spoilers press it onto the road for grip. Supercars are basically jets that forgot their wings."
-      },
-      {
-        q:"The art of paper folding, 'origami', comes from which country?",
-        o:["Brazil","Japan","Egypt","Australia"],
-        a:1,
-        exp:"<b>Japan!</b> 'Ori' means fold and 'kami' means paper. The most famous fold is the paper crane — legend says folding 1,000 cranes grants a wish. Ancient art, ninja-level patience!"
-      },
-      {
-        q:"Why does a paper plane with sharp, crisp folds fly farther?",
-        o:["Sharp folds make it heavier","Crisp folds cut through the air smoothly, giving more lift and less drag","The paper gets angry","Sharp folds make it invisible"],
-        a:1,
-        exp:"<b>Crisp folds = clean aerodynamics!</b> Sharp, even folds keep the wings balanced and let air flow smoothly, giving more lift and less drag. Sloppy folds make air tumble and the plane crash-dive. Real jet engineers obsess over the same thing!"
-      }
-    ]
-  }
-];
-
-const RANKS = [
-  {min:0,    ico:"🧢", name:"CADET"},
-  {min:800,  ico:"🎖️", name:"FLYING OFFICER"},
-  {min:1800, ico:"🥈", name:"SQUADRON LEADER"},
-  {min:3200, ico:"🥇", name:"WING COMMANDER"},
-  {min:5000, ico:"👑", name:"AIR MARSHAL LEGEND"}
-];
-
-const PRAISE = ["DIRECT HIT! 🎯","ROGER THAT, ACE!","TARGET DESTROYED! 💥","AFTERBURNERS ON! 🔥","MISSILE LOCK — PERFECT! 🚀","OUTSTANDING FLYING! ⭐"];
-const OOPS   = ["MISSED — RECALIBRATE! 🧭","EJECT! WRONG TARGET! 😅","TURBULENCE! TRY AGAIN SOON 🌀","NEGATIVE, CADET — DEBRIEF TIME 📡"];
-const QUOTES3 = "FLAWLESS VICTORY, ACE! Every single target hit on the FIRST pass. The whole squadron is talking about you! 🏆";
-const QUOTES2 = "Mission mastered, Commander! A couple of targets needed a second pass — but you locked them ALL in. That's how pilots learn!";
-const QUOTES1 = "Mission mastered! It took a few extra passes, but you never gave up — and now you KNOW this stuff. Fly it again for 3 stars!";
-
-/* ---------------- STATE ---------------- */
-const SAVE_KEY = "skyCommanderSave_v1";
-let save = loadSave();
-let session = null;
-
-function loadSave(){
-  try{
-    const s = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if(s && s.missions) return s;
-  }catch(e){}
-  return {pilot:"", muted:false, missions:{}}; // missions[id] = {stars,bestScore,mastered}
-}
-function persist(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){} }
-function mrec(id){ return save.missions[id] || {stars:0,bestScore:0,mastered:false}; }
-function careerPoints(){ return MISSIONS.reduce((t,m)=>t+(mrec(m.id).bestScore||0),0); }
-function totalStars(){ return MISSIONS.reduce((t,m)=>t+(mrec(m.id).stars||0),0); }
-function medalsOwned(){ return MISSIONS.filter(m=>mrec(m.id).mastered).length; }
-
-/* ---------------- AUDIO (Web Audio, all synthesized) ---------------- */
-let AC = null, ambNodes = null;
-function audio(){
-  if(!AC){ AC = new (window.AudioContext||window.webkitAudioContext)(); }
-  if(AC.state === "suspended") AC.resume();
-  return AC;
-}
-function tone(freq, t0, dur, {type="sine", vol=0.18, slide=null}={}){
-  if(save.muted) return;
-  const ctx = audio();
-  const o = ctx.createOscillator(), g = ctx.createGain();
-  o.type = type; o.frequency.setValueAtTime(freq, ctx.currentTime + t0);
-  if(slide) o.frequency.exponentialRampToValueAtTime(slide, ctx.currentTime + t0 + dur);
-  g.gain.setValueAtTime(0.0001, ctx.currentTime + t0);
-  g.gain.exponentialRampToValueAtTime(vol, ctx.currentTime + t0 + 0.015);
-  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t0 + dur);
-  o.connect(g).connect(ctx.destination);
-  o.start(ctx.currentTime + t0); o.stop(ctx.currentTime + t0 + dur + 0.05);
-}
-function noiseBurst(t0, dur, {fStart=400, fEnd=3000, vol=0.25, q=1}={}){
-  if(save.muted) return;
-  const ctx = audio();
-  const len = Math.ceil(ctx.sampleRate * dur);
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const d = buf.getChannelData(0);
-  for(let i=0;i<len;i++) d[i] = Math.random()*2-1;
-  const src = ctx.createBufferSource(); src.buffer = buf;
-  const bp = ctx.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=q;
-  bp.frequency.setValueAtTime(fStart, ctx.currentTime + t0);
-  bp.frequency.exponentialRampToValueAtTime(fEnd, ctx.currentTime + t0 + dur);
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, ctx.currentTime + t0);
-  g.gain.exponentialRampToValueAtTime(vol, ctx.currentTime + t0 + 0.03);
-  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t0 + dur);
-  src.connect(bp).connect(g).connect(ctx.destination);
-  src.start(ctx.currentTime + t0); src.stop(ctx.currentTime + t0 + dur + 0.05);
-}
-const sfx = {
-  click(){ tone(900, 0, .07, {type:"square", vol:.06}); },
-  correct(){ [523,659,784,1047].forEach((f,i)=>tone(f, i*0.09, .16, {type:"triangle", vol:.2})); },
-  wrong(){ tone(180, 0, .22, {type:"sawtooth", vol:.14, slide:110}); tone(140, .22, .3, {type:"sawtooth", vol:.12, slide:80}); },
-  whoosh(){ noiseBurst(0, .55, {fStart:300, fEnd:4200, vol:.2, q:1.2}); },
-  streak(){ tone(600, 0, .1, {type:"square", vol:.1, slide:1400}); tone(1400, .1, .12, {type:"square", vol:.1, slide:2200}); },
-  fanfare(){
-    const seq=[[523,0],[659,.14],[784,.28],[1047,.42],[784,.6],[1047,.74],[1319,.9]];
-    seq.forEach(([f,t])=>{ tone(f,t,.3,{type:"triangle",vol:.22}); tone(f/2,t,.3,{type:"sine",vol:.12}); });
-    noiseBurst(.9,.8,{fStart:2000,fEnd:600,vol:.12,q:.7});
-  },
-  bigwin(){
-    sfx.fanfare();
-    [1047,1319,1568,2093].forEach((f,i)=>tone(f, 1.2+i*.12, .4, {type:"triangle", vol:.2}));
-  }
-};
-function ambienceStart(){
-  if(save.muted || ambNodes) return;
-  const ctx = audio();
-  const o1 = ctx.createOscillator(), o2 = ctx.createOscillator();
-  o1.type="sawtooth"; o1.frequency.value=54;
-  o2.type="sawtooth"; o2.frequency.value=54.7;
-  const lp = ctx.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=140;
-  const g = ctx.createGain(); g.gain.value=0.028;
-  const lfo = ctx.createOscillator(); lfo.frequency.value=0.13;
-  const lfoG = ctx.createGain(); lfoG.gain.value=0.012;
-  lfo.connect(lfoG).connect(g.gain);
-  o1.connect(lp); o2.connect(lp); lp.connect(g).connect(ctx.destination);
-  o1.start(); o2.start(); lfo.start();
-  ambNodes = [o1,o2,lfo];
-}
-function ambienceStop(){
-  if(ambNodes){ ambNodes.forEach(n=>{try{n.stop()}catch(e){}}); ambNodes=null; }
-}
-function setMuted(m){
-  save.muted = m; persist();
-  document.querySelectorAll("#btn-mute,#btn-mute2").forEach(b=>b.textContent = m ? "🔇" : "🔊");
-  if(m) ambienceStop(); else ambienceStart();
-}
-
-/* ---------------- DOM HELPERS ---------------- */
-const $ = id => document.getElementById(id);
-function show(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  $(id).classList.add("active");
-  window.scrollTo(0,0);
-}
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-  return a;
-}
-
-/* ---------------- FX ---------------- */
-function jetFlyby(){
-  const j = $("jetfly");
-  j.classList.remove("go"); void j.offsetWidth; j.classList.add("go");
-  sfx.whoosh();
-}
-function confetti(n=120){
-  const colors = ["#00e5ff","#ffb300","#ff2ee6","#2bff88","#ffffff","#ff3b5c"];
-  for(let i=0;i<n;i++){
-    const c = document.createElement("i");
-    c.className = "confetti-bit";
-    const size = 6+Math.random()*8;
-    c.style.cssText = `left:${Math.random()*100}vw;width:${size}px;height:${size*0.5}px;
-      background:${colors[i%colors.length]};--spin:${Math.random()>0.5?"":"-"}${360+Math.random()*720}deg;
-      animation-duration:${2+Math.random()*2.4}s;animation-delay:${Math.random()*0.8}s;
-      border-radius:${Math.random()>0.5?"50%":"2px"}`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(), 5600);
-  }
-}
-function floatPoints(txt, x, y){
-  const p = document.createElement("div");
-  p.className = "float-pts"; p.textContent = txt;
-  p.style.left = x+"px"; p.style.top = y+"px";
-  document.body.appendChild(p);
-  setTimeout(()=>p.remove(), 1100);
-}
-function makeStars(){
-  const wrap = $("stars");
-  for(let i=0;i<130;i++){
-    const s = document.createElement("i");
-    const z = Math.random();
-    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;
-      width:${1+z*2}px;height:${1+z*2}px;opacity:${.2+z*.7};animation-delay:${Math.random()*3}s;
-      animation-duration:${2+Math.random()*3}s`;
-    wrap.appendChild(s);
-  }
-}
-
-/* ---------------- BASE SCREEN ---------------- */
-function renderBase(){
-  $("hud-pilot").textContent = save.pilot || "CADET";
-  $("hud-total").textContent = careerPoints();
-  $("hud-stars").textContent = `${totalStars()}/${MISSIONS.length*3}`;
-
-  const pts = careerPoints();
-  let rank = RANKS[0], next = null;
-  for(const r of RANKS){ if(pts >= r.min) rank = r; else { next = r; break; } }
-  $("rank-ico").textContent = rank.ico;
-  $("rank-name").textContent = rank.name;
-  $("rank-next").textContent = next ? `${next.min - pts} pts to ${next.name}` : "MAXIMUM RANK ACHIEVED!";
-
-  const wrap = $("missions");
-  wrap.innerHTML = "";
-  MISSIONS.forEach((m, idx)=>{
-    const rec = mrec(m.id);
-    const locked = idx > 0 && !mrec(MISSIONS[idx-1].id).mastered;
-    const card = document.createElement("div");
-    card.className = "mcard" + (locked?" locked":"") + (rec.mastered?" mastered":"");
-    card.innerHTML = `
-      ${rec.mastered ? '<span class="m-done">✔ MASTERED</span>' : ''}
-      <span class="m-ico">${m.icon}</span>
-      <h3>${m.name}</h3>
-      <p>${m.desc}</p>
-      <div class="m-meta">
-        <span class="m-stars">${"★".repeat(rec.stars)}${"☆".repeat(3-rec.stars)}</span>
-        <span class="m-q">${m.questions.length} TARGETS</span>
-      </div>`;
-    if(!locked){
-      card.addEventListener("click", ()=>{ sfx.click(); startMission(idx); });
-    }
-    wrap.appendChild(card);
-  });
-
-  const br = $("badge-row");
-  br.innerHTML = "";
-  MISSIONS.forEach(m=>{
-    const owned = mrec(m.id).mastered;
-    const b = document.createElement("div");
-    b.className = "badge" + (owned ? " owned":"");
-    b.innerHTML = `<span class="b-ico">${m.badge.ico}</span><small>${m.badge.name}</small>`;
-    br.appendChild(b);
-  });
-  const ace = document.createElement("div");
-  const allAce = MISSIONS.every(m=>mrec(m.id).stars===3);
-  ace.className = "badge" + (allAce ? " owned":"");
-  ace.innerHTML = `<span class="b-ico">🏆</span><small>Full-Marks Legend</small>`;
-  br.appendChild(ace);
-}
-
-/* ---------------- QUIZ ENGINE ---------------- */
-function startMission(idx){
-  const m = MISSIONS[idx];
-  session = {
-    idx, m,
-    queue: shuffle(m.questions.map((_,i)=>i)),
-    total: m.questions.length,
-    attempts: {},          // qi -> tries
-    firstTry: 0,
-    locked: 0,             // questions answered correctly (mastered)
-    score: 0,
-    streak: 0,
-    bestStreak: 0,
-    current: null,
-    answered: false
-  };
-  $("q-mission").textContent = m.icon + " " + m.name.replace("Operation ","").toUpperCase();
-  ambienceStart();
-  jetFlyby();
-  show("screen-quiz");
-  nextQuestion();
-}
-
-function nextQuestion(){
-  const s = session;
-  document.body.classList.toggle("afterburner", s.streak >= 3);
-  if(s.queue.length === 0){ return missionComplete(); }
-  s.current = s.queue.shift();
-  s.answered = false;
-  const q = s.m.questions[s.current];
-  const isRetry = (s.attempts[s.current]||0) > 0;
-
-  $("q-num").textContent = `TARGET ${s.locked+1} OF ${s.total}`;
-  $("q-retry").style.display = isRetry ? "" : "none";
-  $("q-text").textContent = q.q;
-  $("q-score").textContent = s.score;
-  $("q-streak").textContent = s.streak > 0 ? "🔥"+s.streak : "—";
-  $("feedback").className = "feedback";
-
-  updateAltitude();
-
-  const keys = ["1","2","3","4"];
-  const wrap = $("opts");
-  wrap.innerHTML = "";
-  q.o.forEach((opt,i)=>{
-    const b = document.createElement("button");
-    b.className = "opt";
-    b.innerHTML = `<span class="key">${keys[i]}</span><span>${opt}</span>`;
-    b.addEventListener("click", ()=>answer(i, b));
-    wrap.appendChild(b);
-  });
-}
-
-function updateAltitude(){
-  const s = session;
-  const pct = Math.round((s.locked / s.total) * 100);
-  $("alt-fill").style.width = pct + "%";
-  $("alt-jet").style.left = pct + "%";
-  $("alt-count").textContent = `${s.locked} / ${s.total} targets locked`;
-}
-
-function answer(i, btn){
-  const s = session;
-  if(s.answered) return;
-  s.answered = true;
-  const q = s.m.questions[s.current];
-  s.attempts[s.current] = (s.attempts[s.current]||0) + 1;
-  const firstTry = s.attempts[s.current] === 1;
-  const correct = i === q.a;
-
-  const opts = [...$("opts").children];
-  opts.forEach(o=>o.disabled = true);
-
-  const fb = $("feedback");
-  if(correct){
-    btn.classList.add("correct");
-    opts.forEach((o,oi)=>{ if(oi!==i) o.classList.add("dim"); });
-    s.locked++;
-    s.streak++;
-    s.bestStreak = Math.max(s.bestStreak, s.streak);
-    if(firstTry) s.firstTry++;
-    const streakBonus = firstTry ? Math.min(s.streak-1,5)*20 : 0;
-    const pts = (firstTry ? 100 : 50) + streakBonus;
-    s.score += pts;
-    sfx.correct();
-    if(s.streak === 3){ sfx.streak(); }
-    document.body.classList.toggle("afterburner", s.streak >= 3);
-
-    const r = btn.getBoundingClientRect();
-    floatPoints("+"+pts, r.left + r.width/2, r.top);
-
-    fb.className = "feedback show good";
-    $("fb-head").textContent = PRAISE[Math.floor(Math.random()*PRAISE.length)];
-    $("fb-pts").innerHTML = `+${pts} PTS` +
-      (streakBonus ? ` <span style="color:#ff8c42">(includes +${streakBonus} streak bonus)</span>` : "") +
-      (!firstTry ? ` <span style="color:var(--muted)">(retry hit — half points)</span>` : "") +
-      (s.streak >= 3 ? `<span class="streak-pill">🔥 AFTERBURNER x${s.streak}</span>` : "");
-  } else {
-    btn.classList.add("wrong");
-    opts[q.a].classList.add("correct");
-    opts.forEach((o,oi)=>{ if(oi!==i && oi!==q.a) o.classList.add("dim"); });
-    s.streak = 0;
-    document.body.classList.remove("afterburner");
-    // requeue: comes back a bit later so he must nail it
-    const back = Math.min(2, s.queue.length);
-    s.queue.splice(back, 0, s.current);
-    sfx.wrong();
-
-    fb.className = "feedback show bad";
-    $("fb-head").textContent = OOPS[Math.floor(Math.random()*OOPS.length)];
-    $("fb-pts").innerHTML = `<span style="color:var(--muted)">This target circles back — hit it right to master the mission!</span>`;
-  }
-  $("fb-body").innerHTML = q.exp;
-  $("q-score").textContent = s.score;
-  $("q-streak").textContent = s.streak > 0 ? "🔥"+s.streak : "—";
-  updateAltitude();
-  setTimeout(()=>$("btn-next").focus(), 80);
-}
-
-function missionComplete(){
-  const s = session;
-  document.body.classList.remove("afterburner");
-  const acc = Math.round((s.firstTry / s.total) * 100);
-  const stars = acc === 100 ? 3 : acc >= 70 ? 2 : 1;
-
-  const rec = mrec(s.m.id);
-  const newBadge = !rec.mastered;
-  save.missions[s.m.id] = {
-    mastered:true,
-    stars:Math.max(rec.stars, stars),
-    bestScore:Math.max(rec.bestScore, s.score)
-  };
-  persist();
-
-  $("d-tag").textContent = s.m.icon + "  " + s.m.name + "  —  Debrief";
-  $("d-title").textContent = stars===3 ? "FLAWLESS VICTORY!" : "Mission Mastered!";
-  $("d-quote").textContent = stars===3 ? QUOTES3 : stars===2 ? QUOTES2 : QUOTES1;
-  $("d-score").textContent = s.score;
-  $("d-acc").textContent = acc + "%";
-  $("d-streak").textContent = s.bestStreak;
-
-  const starEls = $("d-stars").children;
-  [...starEls].forEach((el,i)=>{
-    el.className = "";
-    el.style.animationDelay = "";
-  });
-  const badgeBox = $("d-badge");
-  badgeBox.classList.toggle("show", newBadge);
-  if(newBadge){
-    $("d-badge-ico").textContent = s.m.badge.ico;
-    $("d-badge-name").textContent = s.m.badge.name.toUpperCase() + " MEDAL UNLOCKED";
-  }
-
-  const hasNext = s.idx < MISSIONS.length-1;
-  $("btn-nextmission").style.display = hasNext ? "" : "none";
-
-  show("screen-debrief");
-  jetFlyby();
-  confetti(stars===3 ? 160 : 90);
-  sfx.fanfare();
-  [...starEls].forEach((el,i)=>{
-    setTimeout(()=>{
-      if(i < stars){ el.className="on"; tone(700+i*250, 0, .25, {type:"triangle", vol:.2}); }
-      else el.className="off";
-    }, 500 + i*450);
-  });
-
-  // grand victory check
-  if(MISSIONS.every(m=>mrec(m.id).mastered)){
-    setTimeout(()=>{
-      if(document.getElementById("screen-debrief").classList.contains("active")){
-        showVictory();
-      }
-    }, 4200);
-  }
-}
-
-function showVictory(){
-  const allAce = MISSIONS.every(m=>mrec(m.id).stars===3);
-  $("v-text").innerHTML = allAce
-    ? `<b style="color:var(--amber)">FULL MARKS ON EVERY MISSION!</b> ${save.pilot||"Commander"}, you flew every sortie, hit every target and mastered ALL the knowledge. The Academy salutes you — you are officially a LEGEND OF THE SKIES! 🇮🇳🛩️`
-    : `${save.pilot||"Commander"}, you've mastered every mission! Now chase the ultimate prize: replay missions and hit <b style="color:var(--amber)">every target on the first try</b> to collect all 15 stars and become a FULL-MARKS LEGEND!`;
-  $("v-pts").textContent = careerPoints();
-  $("v-stars").textContent = `${totalStars()}/${MISSIONS.length*3}`;
-  $("v-medals").textContent = medalsOwned();
-  show("screen-victory");
-  jetFlyby();
-  confetti(220);
-  sfx.bigwin();
-  setTimeout(()=>confetti(140), 1500);
-}
-
-/* ---------------- WIRING ---------------- */
-$("btn-start").addEventListener("click", ()=>{
-  const name = $("pilot-name").value.trim().toUpperCase();
-  if(name) save.pilot = name;
-  persist();
-  audio(); ambienceStart();
-  sfx.whoosh(); jetFlyby();
-  renderBase();
-  show("screen-base");
-});
-$("pilot-name").addEventListener("keydown", e=>{ if(e.key==="Enter") $("btn-start").click(); });
-
-$("btn-next").addEventListener("click", ()=>{ sfx.click(); nextQuestion(); });
-$("btn-abort").addEventListener("click", ()=>{ sfx.click(); document.body.classList.remove("afterburner"); renderBase(); show("screen-base"); });
-$("btn-replay").addEventListener("click", ()=>{ sfx.click(); startMission(session.idx); });
-$("btn-base").addEventListener("click", ()=>{ sfx.click(); renderBase(); show("screen-base"); });
-$("btn-nextmission").addEventListener("click", ()=>{ sfx.click(); startMission(session.idx+1); });
-$("btn-victory-base").addEventListener("click", ()=>{ sfx.click(); renderBase(); show("screen-base"); });
-
-$("btn-reset").addEventListener("click", ()=>{
-  if(confirm("Reset ALL progress, points and medals?")){
-    save = {pilot:save.pilot, muted:save.muted, missions:{}};
-    persist(); renderBase();
-  }
-});
-document.querySelectorAll("#btn-mute,#btn-mute2").forEach(b=>{
-  b.addEventListener("click", ()=>setMuted(!save.muted));
-});
-
-document.addEventListener("keydown", e=>{
-  if(!$("screen-quiz").classList.contains("active")) return;
-  if(["1","2","3","4"].includes(e.key) && !session.answered){
-    const idx = +e.key - 1;
-    const btn = $("opts").children[idx];
-    if(btn) btn.click();
-  } else if(e.key === "Enter" && session.answered){
-    e.preventDefault();
-    $("btn-next").click();
-  }
-});
-
-/* ---------------- INIT ---------------- */
-makeStars();
-setMuted(save.muted);
-if(save.pilot) $("pilot-name").value = save.pilot;
-</script>
+<script src="js/questions.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/flight.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>
