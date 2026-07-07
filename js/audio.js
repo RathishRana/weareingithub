@@ -77,6 +77,71 @@ const SFX = {
   }
 };
 
+/* -------- Radio chatter garble: band-passed noise pulsed in syllable
+   rhythms through a walkie-talkie filter — unintelligible ATC babble -------- */
+SFX.chatter = function(){
+  if(SFX.isMuted()) return;
+  const ctx = audioCtx();
+  const dur = 1.2 + Math.random()*1.0;
+  const len = Math.ceil(ctx.sampleRate * dur);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i] = Math.random()*2-1;
+  const src = ctx.createBufferSource(); src.buffer = buf;
+  const bp = ctx.createBiquadFilter(); bp.type="bandpass"; bp.Q.value=5.5;
+  bp.frequency.value = 1050 + Math.random()*250;
+  const g = ctx.createGain();
+  const t0 = ctx.currentTime;
+  // squelch open
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(0.05, t0+0.02);
+  // syllable envelope: talk / gap / talk…
+  let t = 0.05;
+  while(t < dur-0.15){
+    const syl = 0.06 + Math.random()*0.14;
+    g.gain.exponentialRampToValueAtTime(0.028+Math.random()*0.03, t0+t);
+    t += syl;
+    g.gain.exponentialRampToValueAtTime(Math.random()<0.3?0.003:0.012, t0+t);
+    t += 0.03 + Math.random()*0.09;
+  }
+  g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+  src.connect(bp).connect(g).connect(ctx.destination);
+  src.start(t0); src.stop(t0+dur+0.05);
+  // squelch close click
+  tone(1400, dur, .05, {type:"square", vol:.04});
+};
+
+/* -------- Voice: human radio calls via the browser's built-in speech
+   synthesis (offline, zero assets). Wrapped in radio squelch clicks. -------- */
+const Voice = (()=>{
+  const ok = typeof window !== "undefined" && "speechSynthesis" in window;
+  let voice = null;
+  function pick(){
+    try{
+      const vs = speechSynthesis.getVoices();
+      voice = vs.find(v=>/en[-_](IN|GB)/i.test(v.lang))
+           || vs.find(v=>/^en/i.test(v.lang)) || vs[0] || null;
+    }catch(e){}
+  }
+  if(ok){ pick(); try{ speechSynthesis.onvoiceschanged = pick; }catch(e){} }
+  function say(text, {rate=1.04, pitch=0.8, urgent=false}={}){
+    if(!ok || SFX.isMuted()) return;
+    try{
+      speechSynthesis.cancel();                  // never stack transmissions
+      const u = new SpeechSynthesisUtterance(text);
+      if(voice) u.voice = voice;
+      u.rate = urgent ? 1.18 : rate;
+      u.pitch = pitch;
+      u.volume = 1;
+      SFX.radio();                               // squelch open
+      u.onend = ()=>SFX.radio();                 // squelch close
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function stop(){ if(ok){ try{ speechSynthesis.cancel(); }catch(e){} } }
+  return {say, stop};
+})();
+
 /* -------- Engine loop: detuned saws through a lowpass; throttle 0..1 -------- */
 const Engine = (()=>{
   let nodes = null, throttleVal = 0;

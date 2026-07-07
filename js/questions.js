@@ -485,8 +485,12 @@ const QUOTES2 = "Mission mastered, Commander! A couple of targets needed a secon
 const QUOTES1 = "Mission mastered! It took a few extra passes, but you never gave up — and now you KNOW this stuff. Fly it again for 3 stars!";
 
 const MAYDAY_CALLS = [
-  {title:"MAYDAY! ENGINE FIRE!", sub:"Answer the emergency question to trigger the fire suppression system!"},
-  {title:"MAYDAY! BIRD STRIKE!", sub:"Quick — answer correctly to restart the engine!"},
-  {title:"MAYDAY! FUEL LEAK!", sub:"Seal the leak by locking in the right answer!"},
-  {title:"MAYDAY! RADAR JAMMED!", sub:"Reboot the radar with a correct answer, fast!"}
+  {title:"MAYDAY! ENGINE FIRE!", sub:"Answer the emergency question to trigger the fire suppression system!",
+   voice:"Mayday! Mayday! Mayday! Engine fire! Answer the emergency question, now!"},
+  {title:"MAYDAY! BIRD STRIKE!", sub:"Quick — answer correctly to restart the engine!",
+   voice:"Mayday! Mayday! Bird strike! Engine one is down! Answer fast to relight it!"},
+  {title:"MAYDAY! FUEL LEAK!", sub:"Seal the leak by locking in the right answer!",
+   voice:"Mayday! Mayday! We are losing fuel! Lock in the right answer to seal the leak!"},
+  {title:"MAYDAY! RADAR JAMMED!", sub:"Reboot the radar with a correct answer, fast!",
+   voice:"Mayday! Mayday! Radar is jammed! Reboot it with a correct answer, quickly!"}
 ];

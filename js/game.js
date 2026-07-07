@@ -53,6 +53,9 @@ function jetFlyby(){
   j.classList.remove("go"); void j.offsetWidth; j.classList.add("go");
   SFX.whoosh();
 }
+// the flyby ends just off-screen but its light trail still reaches back into
+// view — drop the class as soon as the animation finishes so nothing lingers
+$("jetfly").addEventListener("animationend", ()=>$("jetfly").classList.remove("go"));
 function confetti(n=120){
   const colors = ["#00e5ff","#ffb300","#ff2ee6","#2bff88","#ffffff","#ff3b5c"];
   for(let i=0;i<n;i++){
@@ -99,7 +102,7 @@ function captionOff(){ clearTimeout(captionTimer); $("caption").classList.remove
 function setMuted(m){
   save.muted = m; persist();
   document.querySelectorAll("#btn-mute,#btn-mute2").forEach(b=>b.textContent = m ? "🔇" : "🔊");
-  if(m) Engine.stop();
+  if(m){ Engine.stop(); Voice.stop(); }
 }
 function setMode(m){
   save.mode = m; persist();
@@ -252,6 +255,7 @@ function launchFlight(){
   $("briefing").classList.remove("show");
   SFX.radio();
   caption("🛫 THROTTLE UP, "+(save.pilot||"CADET")+"!");
+  Voice.say(`Tower to ${save.pilot||"cadet"}. Runway is yours. Cleared for takeoff!`);
   Flight.phase("taxi", ()=>{
     caption("ROTATE! CLIMBING… ☁️");
     Flight.phase("climb", ()=>{
@@ -260,8 +264,16 @@ function launchFlight(){
   });
 }
 
+let chatterTimer = 0;
 function cruiseToNext(first){
   caption(first ? "FIRST RING AHEAD — FLY THROUGH IT! 🎯" : "NEXT RING AHEAD — GO GET IT! 🎯");
+  // ambient ATC babble on the radio while cruising
+  clearTimeout(chatterTimer);
+  if(Math.random() < 0.55 && !window.__FAST){
+    chatterTimer = setTimeout(()=>{
+      if(session && session.mode==="flight" && Flight.currentPhase==="cruise") SFX.chatter();
+    }, 1200 + Math.random()*2500);
+  }
   Flight.phase("cruise", ()=>askNext());
 }
 
@@ -285,6 +297,7 @@ function endOfQuestions(){
     $("q-card").style.display = "none";
     caption("ALL TARGETS LOCKED! RETURNING TO BASE… 🛬", true);
     SFX.radio();
+    Voice.say("All targets locked! Outstanding flying. You are cleared to land, welcome home!");
     Flight.phase("approach", evt=>{
       if(evt==="touchdown"){ caption("TOUCHDOWN! 🛬"); }
       else if(evt==="stopped"){ captionOff(); missionComplete(); }
@@ -563,11 +576,13 @@ function resolveAnswer(q, correct, isMayday){
       s.maydaysOk++;
       s.score += 75;
       SFX.repair();
+      Voice.say("Emergency handled! Fire is out, systems green. Great flying, ace!");
       fb.className = "feedback show good";
       $("fb-head").textContent = "EMERGENCY HANDLED! 🔧🔥";
       $("fb-pts").innerHTML = "+75 PTS — fire out, engines relit, crisis averted!";
     } else {
       SFX.wrong();
+      Voice.say("Backup systems engaged. We made it. Stay sharp, cadet!");
       fb.className = "feedback show bad";
       $("fb-head").textContent = "BACKUP SYSTEMS SAVED US! 😅";
       $("fb-pts").innerHTML = `<span style="color:var(--muted)">No points — but read the intel below so it never happens again.</span>`;
@@ -656,6 +671,7 @@ function runMayday(q, cont){
   Flight.phase("mayday");
   Flight.setAlert(true);
   SFX.klaxon();
+  Voice.say(call.voice, {urgent:true});
   $("m-title").textContent = "🚨 " + call.title;
   $("m-sub").textContent = call.sub;
   $("mayday-banner").classList.add("show");
@@ -764,6 +780,8 @@ function showVictory(){
 function abortMission(){
   SFX.click();
   clearInterval(session && session.mtimer);
+  clearTimeout(chatterTimer);
+  Voice.stop();
   document.body.classList.remove("afterburner","in-flight");
   captionOff();
   $("mayday-banner").classList.remove("show");
